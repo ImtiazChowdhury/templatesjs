@@ -6,24 +6,24 @@ A pure javascript module without any dependency and further installation.
 It works using simple javascript function, high speedy and easy to use.
 works with any file format including HTML. you can also include another files in your file using include()
 	
-##table of contents:
+## table of contents:
 
 
 - [Install](#installation)
 - [Usage](#usage)
 
-    - [Render string](#how-to-render-string)
-    - [Render object](#how-to-render-value-of-object)
-    - [Render array](#how-to-render-specific-index-value-of-an-array)
-    - [Loop through array](#how-to-render-all-values-looping-through-the-whole-array)
-    - [Loop through specific array indexes] (#how-to-render-all-values-looping-through-some-specific-index-of-array)
-	- [Specify format of output] (#how-to-specify-format-of-output)
-	- [UPPERCASE, Capitalized, lowercase output](#specify-case)
-	- [Include files](#include-another-file-inside-a-file-or-data)
-	- [Set default directory] (#set-default-directory-for-files)
-	- [Change delimiter](#change-the-delimiter-sign)
-	- [Shorthands for functions] (#shorthands-for-functions)
-	- [Demonstration](#demonstration-with-javascript-on-client-side)
+    - [Render string](#user-content-how-to-render-string)
+    - [Render object](#user-content-how-to-render-value-of-object)
+    - [Render array](#user-content-how-to-render-specific-index-value-of-an-array)
+    - [Loop through array](#user-content-how-to-render-all-values-looping-through-the-whole-array)
+    - [Loop through specific array indexes](#user-content-how-to-render-all-values-looping-through-some-specific-index-of-array)
+	- [Specify format of output](#user-content-how-to-specify-format-of-output)
+	- [UPPERCASE, Capitalized, lowercase output](#user-content-specify-case)
+	- [Include files](#user-content-include-another-file-inside-a-file-or-data)
+	- [Set default directory](#user-content-set-default-directory-for-files)
+	- [Change delimiter](#user-content-change-the-delimiter-sign)
+	- [Shorthands for functions](#user-content-shorthands-for-functions)
+	- [Demonstration](#user-content-demonstration-with-javascript-on-client-side)
 
 
 ## Installation
