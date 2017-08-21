@@ -1,4 +1,6 @@
 #						templatesjs
+
+[![Build Status](https://travis-ci.org/ImtiazChowdhury/templatesjs.svg?branch=master)](https://travis-ci.org/ImtiazChowdhury/templatesjs)
 						
 Render dynamic data to your template without any engine.
 A pure javascript module without any dependency and further installation.
