@@ -56,6 +56,7 @@ $ npm install templatesjs
 for examples below we will be rendering dynamic data to a HTML page
 
 in our html page we must use a tag to call data , a templatesjs tag looks like <%keyword%> 
+
 **note: you can change the delimiter that defines the tag (%) **
 	
 	examle HTML(index.html)
