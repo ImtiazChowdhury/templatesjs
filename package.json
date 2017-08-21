@@ -1,6 +1,6 @@
 {
   "name": "templatesjs",
-  "version": "1.1.1",
+  "version": "1.1.13",
   "description": "Render template without any engine, pure JavaScript,easy to use, works with any file format including HTML, include files inside files, can be used with any framework and raw node.js ",
   "main": "index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "without"
   ],
   "engines": {
-    "node": ">=4.2.4"
+    "node": ">=4.0.0"
   },
   "author": "Imtiaz Chowdhury",
   "license": "MIT",
@@ -27,6 +27,16 @@
     "chai": "^4.1.1",
     "mocha": "^3.5.0"
   },
-  "directories": {},
-  "dependencies": {}
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ImtiazChowdhury/templatesjs.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ImtiazChowdhury/templatesjs/issues"
+  },
+  "homepage": "https://github.com/ImtiazChowdhury/templatesjs#readme"
 }
