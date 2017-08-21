@@ -1,6 +1,12 @@
 #						templatesjs
 
 [![Build Status](https://travis-ci.org/ImtiazChowdhury/templatesjs.svg?branch=master)](https://travis-ci.org/ImtiazChowdhury/templatesjs)
+[![node](https://img.shields.io/badge/Node-=>4.0.0-brightgreen.svg)]()
+[![Dependencies](https://img.shields.io/badge/Dependencies-none-brightgreen.svg)]()
+
+[![npm](https://img.shields.io/npm/v/templatesjs.svg)]()
+[![npm](https://img.shields.io/npm/l/templatesjs.svg)]()
+[![npm](https://img.shields.io/npm/dw/templatesjs.svg)]()
 						
 Render dynamic data to your template without any engine.
 A pure javascript module without any dependency and further installation.
