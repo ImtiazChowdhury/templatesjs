@@ -11,20 +11,19 @@ works with any file format including HTML. you can also include another files in
 
 - [Install](#installation)
 - [Usage](#usage)
-
-    - [Render string](#how-to-render-string)
-    - [Render object](#how-to-render-value-of-object)
-    - [Render array](#how-to-render-specific-index-value-of-an-array)
-    - [Loop through array](#how-to-render-all-values-looping-through-the-whole-array)
-    - [Loop through specific array indexes] (#how-to-render-all-values-looping-through-some-specific-index-of-array)
-	- [Specify format of output] (#how-to-specify-format-of-output)
-	- [UPPERCASE, Capitalized, lowercase output](#specify-case)
-	- [Include files](#include-another-file-inside-a-file-or-data)
-	- [Set default directory] (#set-default-directory-for-files)
-	- [Change delimiter](#change-the-delimiter-sign)
-	- [Shorthands for functions] (#shorthands-for-functions)
-	- [Demonstration](#demonstration-with-javascript-on-client-side)
-
+<a href="#how-to-render-string">Render string</a>
+<a href="#how-to-render-value-of-object">Render object</a>
+<a href="#how-to-render-specific-index-value-of-an-array">Render array</a>
+<a href="#how-to-render-all-values-looping-through-the-whole-array">Loop through array</a>
+<a href="#how-to-render-all-values-looping-through-some-specific-index-of-array">Loop through specific array indexes</a>
+<a href="#how-to-specify-format-of-output">Specify format of output</a>
+<a href="#specify-case">UPPERCASE, Capitalized, lowercase output</a>
+<a href="#include-another-file-inside-a-file-or-data">Include files</a>
+<a href="#set-default-directory-for-files">Set default directory</a>
+<a href="#change-the-delimiter-sign">Change delimiter</a>
+<a href="#Shorthands for functions">shorthands-for-functions</a>
+<a href="#demonstration-with-javascript-on-client-side">Demonstration</a>
+ 
 
 ## Installation
 
