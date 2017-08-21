@@ -9,8 +9,8 @@ works with any file format including HTML. you can also include another files in
 ## table of contents:
 
 
-- [Install](#installation)
-- [Usage](#usage)
+- [Install](#user-content-installation)
+- [Usage](#user-content-usage)
 
     - [Render string](#user-content-how-to-render-string)
     - [Render object](#user-content-how-to-render-value-of-object)
