@@ -74,6 +74,6 @@ describe('#templatesjs', function() {
 		templatesjs.dir = "./test/"
 	   var result = templatesjs.set("<%include test.txt %>");
 	   
-       expect(result).to.equal('templatesjs');
+       expect(result).to.equal('templatesjs\n');
     });
 });
