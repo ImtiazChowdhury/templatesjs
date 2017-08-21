@@ -28,14 +28,14 @@ works with any file format including HTML. you can also include another files in
     - [Render object](#how-to-render-value-of-object)
     - [Render array](#how-to-render-specific-index-value-of-an-array)
     - [Loop through array](#how-to-render-all-values-looping-through-the-whole-array)
-    - [Loop through specific array indexes] (#how-to-render-all-values-looping-through-some-specific-index-of-array)
-	- [Specify format of output] (#how-to-specify-format-of-output)
-	- [UPPERCASE, Capitalized, lowercase output](#specify-case)
-	- [Include files](#include-another-file-inside-a-file-or-data)
-	- [Set default directory] (#set-default-directory-for-files)
-	- [Change delimiter](#change-the-delimiter-sign)
-	- [Shorthands for functions] (#shorthands-for-functions)
-	- [Demonstration](#demonstration-with-javascript-on-client-side)
+    - [Loop through specific array indexes](#how-to-render-all-values-looping-through-some-specific-index-of-array)
+    - [Specify format of output](#how-to-specify-format-of-output)
+    - [UPPERCASE, Capitalized, lowercase output](#specify-case)
+    - [Include files](#include-another-file-inside-a-file-or-data)
+    - [Set default directory](#set-default-directory-for-files)
+    - [Change delimiter](#change-the-delimiter-sign)
+    - [Shorthands for functions](#shorthands-for-functions)
+    - [Demonstration](#demonstration-with-javascript-on-client-side)
 
 
 ## Installation
@@ -56,7 +56,7 @@ $ npm install templatesjs
 for examples below we will be rendering dynamic data to a HTML page
 
 in our html page we must use a tag to call data , a templatesjs tag looks like <%keyword%> 
-note: you can change the delimiter that defines the tag (%) 
+**note: you can change the delimiter that defines the tag (%) **
 	
 	examle HTML(index.html)
 ```html
