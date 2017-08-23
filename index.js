@@ -29,6 +29,7 @@ var fs = require('fs');
 
 */
 exports.dir;
+exports.logErr = false;
 function include(){
 	
 	while(midFile.indexOf("<"+delim+"include") !=-1){
@@ -47,14 +48,21 @@ function include(){
 			if(fs.existsSync(exports.dir+fileName) == true){
 			var file = fs.readFileSync(exports.dir+fileName);
 			}else if(fs.existsSync(exports.dir+fileName) == false){
-				file="";
-				
+				if(exports.logErr){
+					file = "File Not Found!";
+				}else{
+					file = "";
+				}
 			}
 		}else{
 			if(fs.existsSync(fileName) == true){
 				var file = fs.readFileSync(fileName);
-			}else if(fs.existsSync(exports.dir+fileName) == false){
-				file="";
+			}else if(fs.existsSync(fileName) == false){
+				if(exports.logErr){
+					file = "File Not Found!";
+				}else{
+					file = "";
+				}
 			}
 			
 		}

@@ -2,6 +2,7 @@
 
 
 
+### Render dynamic data to your template.
 
 [![Build Status](https://travis-ci.org/ImtiazChowdhury/templatesjs.svg?branch=master)](https://travis-ci.org/ImtiazChowdhury/templatesjs)
 [![node](https://img.shields.io/badge/Node-=>4.0.0-brightgreen.svg)]()
@@ -11,32 +12,35 @@
 [![npm](https://img.shields.io/npm/l/templatesjs.svg)]()
 [![npm](https://img.shields.io/npm/dw/templatesjs.svg)]()
 
+## Features
 
-Render dynamic data to your template without any engine.
-A pure javascript module without any dependency and further installation.
+* **Output data with <%%>**
+* **Output String, Array, Object.property**
+* **Format Output**
+* **UPPERCASE, Capitalized, Lowercase Output**
+* **Include**
+* **Custom delimiters (e.g., use <# #> instead of <% %>)**
 
-It works using simple javascript functions, high speedy and easy to use.
-works with any file format including HTML. you can also include another files in your file using include()
 	
-## table of contents:
+## Table of contents:
 
 
 - [Install](#installation)
 - [Usage](#usage)
 
-    - [Render string](#how-to-render-string)
-    - [Render object](#how-to-render-value-of-object)
-    - [Render array](#how-to-render-specific-index-value-of-an-array)
-    - [Loop through array](#how-to-render-all-values-looping-through-the-whole-array)
-    - [Loop through specific array indexes](#how-to-render-all-values-looping-through-some-specific-index-of-array)
-    - [Specify format of output](#how-to-specify-format-of-output)
-    - [UPPERCASE, Capitalized, lowercase output](#specify-case)
-    - [Include files](#include-another-file-inside-a-file-or-data)
-    - [Set default directory](#set-default-directory-for-files)
-    - [Change delimiter](#change-the-delimiter-sign)
-    - [Shorthands for functions](#shorthands-for-functions)
-    - [Demonstration](#demonstration-with-javascript-on-client-side)
-
+    - [Render string](#string)
+    - [Render object](#object)
+    - [Render array](#array)
+    - [Loop through array](#loop-through-array)
+    - [Loop through specific array indexes](#loop-through-specific-index-of-array)
+	- [Specify format of output](#format-of-output)
+	- [UPPERCASE, Capitalized, lowercase output](#specify-case)
+	- [Include files](#include-file)
+	- [Set default directory](#set-default-directory)
+	- [Change delimiter](#delimiter-sign)
+	- [Shorthands for functions](#shorthands-for-functions)
+	- [Demonstration](#demonstration-with-javascript-on-client-side)
+- [Test](#test)
 
 ## Installation
 
@@ -44,30 +48,43 @@ works with any file format including HTML. you can also include another files in
 $ npm install templatesjs
 ```
 
-  
-  
-  
+### Using git 
  
-## Usage
+  ```sh
+  $ git clone https://github.com/ImtiazChowdhury/templatesjs.git
+ ```
+ 
+# Usage  
 
+####Example html : 
+```html 
 
-## How to render string
+	<body>
+		Hello <%name%>
+	</body>
+	
 
-for examples below we will be rendering dynamic data to a HTML page
+```
+####node.js
+```js
+	
+	temp.render("name", "John Doe");
+	
+```
 
-in our html page we must use a tag to call data , a templatesjs tag looks like <%keyword%> 
-
-**note: you can change the delimiter that defines the tag (%) **
+####Output : 
+    Hello John Doe
+    
+##string
+Use <% %> to use rendered data in HTML page
 	
 	examle HTML(index.html)
+	
 ```html
 	<!DOCTYPE HTML>
 	<html>
-	<head>
-		<title>TemplatesJS Demonstration</title>
-	</head>
 	<body>
-		HELLO <%user %>
+		HELLO <%firstname%> <%lastname%>
 	</body>
 	</html>
 ```
@@ -78,16 +95,13 @@ here we will replace the `<%user%>` tag with John Doe;
 	
 ```js 
 	var templatesjs = require('templatesjs');
-	
 	fs.readFile("./index.html", function(err,data){
 		if(err) through err
 		
-		/*you must set data once for each file, templatesjs works 
-		with the given data, not with the actual file;*/
+		templatesjs.set(data);	//set the data to modify
 		
-		templatesjs.set(data);		
-		
-		var output = templatesjs.render("user", "John Doe");
+		var output = templatesjs.render("firstname", "John");
+		output = templatesjs.render("lastname", "Doe");
 		res.write(output);
 		res.end();
 		
@@ -96,8 +110,11 @@ here we will replace the `<%user%>` tag with John Doe;
 	
 	
 this will print `"HELLO John Doe"` on the browser instead of `hello <%user%>`
+
+templatesjs work with the data you set using set(). It modifies the data and returns the modified data.  
+It will all `<%firstname%>` tags in the data with "John" and return the data.
 	
-## How to render value of object
+## object
 we can also render array or object value as
 	
 	
@@ -117,8 +134,10 @@ we can also render array or object value as
 ```
 this will print "HELLO John Doe"
 
+Templatesjs won't render the object `profile` to the page,   
+it will only relace the `<%user.name%>` with the `name` property of `profile` object.
 	
-## How to render specific index value of an array
+## array
 	
 for array:
 	
@@ -141,7 +160,7 @@ for array:
 this will print `"HELLO John Doe"`
 	
 	
-## How to render all values looping through the whole array
+## loop through array
 	
 or all values of an array :
 	
@@ -162,7 +181,7 @@ or all values of an array :
 this will print `"HELLO John Doe18"`
 	
 	
-## How to render all values looping through some specific index of array
+## loop through specific index of array
 	
 all array values starting from an index to another one
 	
@@ -188,9 +207,11 @@ all array values starting from an index to another one
 
 ```
 this will print `"18helloworldJS"`
+
+A loop will be performed which will start form `user[2]` and finish on `user[5]'.
+No whitespace will be added before or after the values.
 	
-	
-## How to specify format of output
+## format of output
 	
 suppose that we want a for each loop through our array values 
 using templatesjs it can be done like
@@ -219,9 +240,11 @@ using templatesjs it can be done like
 ```
 output : `<a href="user/John">John</a> <a href="user/Doe">Doe</a> `
 	
-	
+A loop will be performed and values will be added inside the specified format  
+replacing all "*" with actual value. I foyu want a Linebreak at the end of every link  
+you must specify the format as `{<a href="user/*">*</a> <br />}` 
 
-for a loop through specified indexes of an array in specified format
+#### for a loop through specified indexes of an array in specified format
 ```html
 	<body>
 	
@@ -243,7 +266,7 @@ output : `<a href="user/foo">foo</a>  <a href="user/bar">bar</a>  <a href="user/
 	
 	
 	
-	or specify format for only one array index if you want
+#### or specify format for only one array index if you want
 ```html
 <body>
 		<%user[2] {<a href="user/*">*</a>}%>  
@@ -261,14 +284,13 @@ output : `<a href="user/foo">foo</a>  <a href="user/bar">bar</a>  <a href="user/
 	
 ```
 output : `<a href="user/foo">foo</a>`
-	
-	
+
 	
 ## Specify case
 
 **specify output to be UPPERCASE or Capitalized or lowercase**
 	
-you can specify whether the output will be in UPPERCASE, lowercase, Capitalized using a third optional `"case"` param 
+you can specify whether the output will be in UPPERCASE, lowercase, Capitalized using a third optional `"style"` param 
 in the `templatesjs.render()` function
 	
 the case param supports three values "CASE", "Case", or "case"
@@ -303,9 +325,11 @@ the case param supports three values "CASE", "Case", or "case"
 output : `UPPERCASE: JOHN `;
 		`Capitalized: Doe`;
 		`lowercase: smith`;
+
+Any value for the style parameter other than "CASE", "Case" or "case" will produce an error message on the console  
+and consider the value of style as undefined.
 	
-	
-## Include another file inside a file or data
+## Include file
 	
 templatesjs also has an include feature which can be used 
 to include file or template parts just use the `<%include%>` tag in your file 
@@ -332,11 +356,14 @@ to include file or template parts just use the `<%include%>` tag in your file
 no need to render  anything in the node.js file, the files 	will be rendered 
 automatixally when you set data using `templatesjs.set()` function;
 	
+The `include` function gets invoked when you set the data for template.
+It will look for every file specified inside <%inlude %> tag and replace the tag with Data read from those files.
+Because include is performed at the very beginning **you can render data inside those included files as well**
+
+If the file is not found it will replace the <%include %> tag with "". Without causing any error.
+You can set `teplatesjs.logErr` to `true` if you want a "File Not Found!" error in the output.
 	
-	
-	
-	
-## Set default directory for files
+## Set default directory
 
 **set default directory**:
 	
@@ -355,9 +382,9 @@ suppose that we have all our html files in the "public" directory
 	 
 	 templatesjs.set("/*you data goes here*/");
 ```
-	
-	
-## Change the delimiter sign
+the default directory (if needed to be set) must be set before setting the data using `ste()`. 
+
+## delimiter sign
 	
 **Don't like to use the "%" sign to define tags in html page you can change them :D :D :D** 
 use the templatesjs.delim() function
@@ -389,7 +416,7 @@ functions can also be used as :
 * **render()** :                   `rn`
 	
 * **delim()**  :                    `delimier()`
-* **delim()**  :                    `del(`
+* **delim()**  :                    `del()`
 * **delim()**  :                     `d()`
 	
 	
@@ -430,11 +457,11 @@ functions can also be used as :
 	var templatesjs = require('templatesjs');
 	var fs = require('fs');
 	var http = require('http');
-	
+	templatesjs.dir = "./public/"
 	http.crateServer(function(req,res){
 		fs.readFile("./public/index.html", function(err,data){
 			if(err) throw err;
-			templatesjs.dir = "./public/"
+			
 			templatesjs.set(data)
 			
 			var users=["John", "Doe", "Smith"];
@@ -450,6 +477,14 @@ functions can also be used as :
 	}).listen(8080);
 ```
 
+#### for each view you want to render set data once. 
+
+## Test
+
+```sh
+   $ npm test
+```
+Please Report any bug or issue on https://github.com/ImtiazChowdhury/templatesjs/issues.
 
 Thank You for having a look through.
 Hope you enjoy coding with templatesJS.
