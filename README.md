@@ -75,7 +75,7 @@ $ npm install templatesjs
 ####Output : 
     Hello John Doe
     
-##string
+## string
 Use <% %> to use rendered data in HTML page
 	
 	examle HTML(index.html)
