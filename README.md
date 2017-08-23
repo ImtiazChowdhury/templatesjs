@@ -56,7 +56,7 @@ $ npm install templatesjs
  
 # Usage  
 
-####Example html : 
+#### Example html : 
 ```html 
 
 	<body>
@@ -65,14 +65,14 @@ $ npm install templatesjs
 	
 
 ```
-####node.js
+#### node.js
 ```js
 	
 	temp.render("name", "John Doe");
 	
 ```
 
-####Output : 
+#### Output : 
     Hello John Doe
     
 ## string
