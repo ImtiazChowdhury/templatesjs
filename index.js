@@ -1,86 +1,104 @@
 'use strict';
 
 
+
+
+var fs = require('fs');
 /** 
 
 ** the default delimiter is % which will be used as <% %>
 
 */
 
-var delim = "%";
-
-
-/**
-
-**the default delimiter can be replaced by any sign including !@#$%^&* 
-
-*/
-exports.delim = function setDelimiter(sign){
-	delim = sign;
-}
+exports.delim = "%";
+exports.dir=""
 var midFile="";
 var style = "";
 
-
-var fs = require('fs');
 /**
 
 ** include any file that is demanded using the <%include filename%> tag
 
 */
 exports.dir;
-exports.logErr = false;
-function include(){
+
+function includeSync(){
 	
-	while(midFile.indexOf("<"+delim+"include") !=-1){
-		var start = midFile.indexOf("<"+delim+"include");
+	while(midFile.indexOf("<"+exports.delim+"include") !=-1){
+		var start = midFile.indexOf("<"+exports.delim+"include");
 		var cutstr = midFile.substr(start);
-		var tag = cutstr.substr(0, cutstr.indexOf(delim+">")+2); 
+		var tag = cutstr.substr(0, cutstr.indexOf(exports.delim+">")+2); 
 		var fileName = tag.substr(10, tag.length-12).replace(/ /g,'');
-		
-		/**
-		
-		** if the fiule does not exists the program should not stop
-		** leave an error message in the console and continue
-		
-		*/
-		if(exports.dir){
-			if(fs.existsSync(exports.dir+fileName) == true){
-			var file = fs.readFileSync(exports.dir+fileName);
-			}else if(fs.existsSync(exports.dir+fileName) == false){
-				if(exports.logErr){
-					file = "File Not Found!";
-				}else{
-					file = "";
-				}
-			}
-		}else{
-			if(fs.existsSync(fileName) == true){
-				var file = fs.readFileSync(fileName);
-			}else if(fs.existsSync(fileName) == false){
-				if(exports.logErr){
-					file = "File Not Found!";
-				}else{
-					file = "";
-				}
-			}
-			
-		}
+		var file = fs.readFileSync(exports.dir+fileName);
 		midFile = midFile.replace(tag, file);
+		
 	}
-		return midFile;
+	return midFile;
+}
+
+function include(cb){
+	if(!cb){
+		var exception  = "Error: No callback function defined, use setSync() instead of set() for synchronized output!"
+		throw exception;
+		return;
+	}
+	var fileArr=[], posArr=[];
+	
+	/**
+	
+	**because while loops don't wait for a asynchronous func to complete 
+	**fs.readFile can't be nested inside a while loop
+	**solution is to create an array of filenames and postions tpo include them
+	**and perform a forEach loop
+	
+	*/
+	while(midFile.indexOf("<"+exports.delim+"include")!=-1){
+		var start = midFile.indexOf("<"+exports.delim+"include");
+		var cutstr = midFile.substr(start);
+		var tag = cutstr.substr(0, cutstr.indexOf(exports.delim+">")+2); 
+		var fileName = tag.substr(10, tag.length-12).replace(/ /g,'');
+		midFile= midFile.replace(tag,"<%&"+fileName+"here%>");
+		fileArr[fileArr.length] = fileName;
+		posArr[posArr.length] = start;
+	}
+	if(fileArr.length == 0){
+		return cb(null,midFile);
+	}
+	var counter=0;
+	fileArr.forEach(function(name, index){
+		fs.readFile(exports.dir+name, function(err,data){
+			if(err) {
+				return cb(err);
+			}
+			midFile=midFile.replace("<%&"+name+"here%>", data); 
+			
+			counter++;
+			if(counter >= fileArr.length){
+				return cb(null,midFile);
+			}
+		});
+		
+		
+	});
+	
+	
+			
 }
 
 /** 
 **the data must be set once for each page
 **operations will be performed on the data rendered , not on the file
 */
-exports.set = function setData(data){
+exports.set = function setData(data,cb){
 	midFile =String(data);
-	return include();
+	return include(cb);
 }
 
 
+exports.setSync = function setDataSync(data){
+	midFile = String(data);
+	return includeSync();
+}
 
 /**
 
@@ -131,7 +149,7 @@ function replaceString(tag, value){
 						break;
 					default:
 						var result = midFile.replace(tag, value)
-						console.log(" \n templatesjs ERROR 103 : Invalid Flag provided ("+style+")");
+						exception = " \n templatesjs ERROR 103 : Invalid Flag provided (\""+style+"\") tag "+tag;
 						style="";
 						break;
 						
@@ -178,7 +196,8 @@ function replaceArray(tag, value, format , start, end){
 								break;
 							default:
 								midResult = midResult.replace("*",value[loopx]);
-								console.log("Invalid Flag provided for render()");
+								exception = " \n templatesjs ERROR 103 : Invalid Flag provided (\""+style+"\") for tag "+tag;
+								style ="";
 								break;
 								
 						}
@@ -203,8 +222,11 @@ function replaceArray(tag, value, format , start, end){
 	** getting the type of data wanted from the file to be rendered 
 	
 */
-exports.render = function getType(vName, vValue,flag){
-	/**
+ var exception;	
+ var finalised;
+function getType(vName, vValue,flag){
+
+/**
 
 **if the data is not set the module will have nothing to work with
 ** so it will produce an error
@@ -213,8 +235,7 @@ exports.render = function getType(vName, vValue,flag){
 */
 	
 	if(!midFile || midFile =="" ||midFile=="undefined"){
-		console.log("\n templatesjs ERROR 102 : (No Data Recieved)\n"+
-					" use < set() >  function to set  data")
+		return exception = "No Data recieved, Use set() or setSync() to set data before render";
 	}
 	
 	/**
@@ -229,12 +250,12 @@ exports.render = function getType(vName, vValue,flag){
 		** this will ensure that all the same tags are replaced with the same keyword
 		
 	*/
-	while(midFile.indexOf("<"+delim+vName) !=-1){
+	while(midFile.indexOf("<"+exports.delim+vName) !=-1){
 		var string = String(midFile); 
 	/**
 		** this will get starting index of the tag with given keyword
 	*/
-		var start = string.indexOf("<"+delim+vName);
+		var start = string.indexOf("<"+exports.delim+vName);
 		
 		/**
 		
@@ -243,7 +264,7 @@ exports.render = function getType(vName, vValue,flag){
 		*/
 		
 		var findStart = string.substr(start); 
-		var end = findStart.indexOf(delim+">"); 
+		var end = findStart.indexOf(exports.delim+">"); 
 		var tag = findStart.substr(0, end+2); 
 		
 		/**
@@ -251,8 +272,8 @@ exports.render = function getType(vName, vValue,flag){
 			** it needs to be converted into array so that it can work with JSON.parse() function
 			
 		*/
-		var halfArray = tag.replace("<"+delim, "[\"");
-		var getArray = halfArray.replace(delim+">", "\"]");
+		var halfArray = tag.replace("<"+exports.delim, "[\"");
+		var getArray = halfArray.replace(exports.delim+">", "\"]");
 		
 		/**
 		
@@ -303,7 +324,7 @@ exports.render = function getType(vName, vValue,flag){
 				
 				result = replaceString(tag, vValue);
 			}
-			var finalised =result;
+			finalised =result;
 		}
 		
 		/**
@@ -319,7 +340,7 @@ exports.render = function getType(vName, vValue,flag){
 			if (indexes.length == 0){
 				num1 =0;
 				num2 = vValue.length -1;
-				var finalised = replaceArray(tag, vValue, "*", num1, num2) 
+				finalised = replaceArray(tag, vValue, "*", num1, num2) 
 			}
 			
 			/**
@@ -329,7 +350,7 @@ exports.render = function getType(vName, vValue,flag){
 			if (indexes.length == 1){
 				var num = Number(indexes[0]);
 				var result = replaceString(tag, vValue[num]);
-				var finalised =result;
+				finalised =result;
 			}
 			
 			/**
@@ -340,7 +361,7 @@ exports.render = function getType(vName, vValue,flag){
 			if(indexes.length == 2){
 				var num1 = indexes[0];
 				var num2 = indexes[1];
-				var finalised =replaceArray(tag, vValue, "*", num1, num2) 
+				finalised =replaceArray(tag, vValue, "*", num1, num2) 
 			}
 			
 		}
@@ -379,32 +400,94 @@ exports.render = function getType(vName, vValue,flag){
 				num2 = vValue.length -1;
 			}
 			
-			var finalised =replaceArray(tag, vValue,format, num1, num2);
+			finalised =replaceArray(tag, vValue,format, num1, num2);
 		}
 	}
 	return finalised;
 	
 }
-/*
- functionMap = {
-	set : setData,
-	render : render,
-	delimiter : delimiter,
-	include : include
+exports.renderSync=function renderSync(name, value,flag){
+	getType(name,value,flag);
+	if(exception){
+		throw exception;
+	}else{
+		return finalised
+	}
 }
-*/
+
+exports.render = function render(name,value, flag, cb){
+	if(!flag){
+		exception  = "Error: No callback function defined, use renderSync() instead of render() for synchronized output!"
+		throw exception;
+		return;
+	}
+	if(!cb){
+	    if(typeof(flag) !="function" ){
+			exception  = "Error: No callback function defined, use renderSync() instead of render() for synchronized output!"
+			throw exception;
+			return;
+		}else{
+			getType(name,value);
+			if(exception){
+				flag(exception);
+			}else{
+				flag(null,finalised);
+			}
+		}
+	}else{
+		getType(name,value,flag);
+		if(exception){
+			cb(exception);
+		}else{
+			cb(null,finalised);
+		}
+	}
+}
+
+exports.renderAll = function renderAll(obj, cb){
+	if(typeof(obj) !="object"){
+		
+		console.log("ty:"+typeof(obj));
+		exception  = "Error: first argument must be an object for function : renderAll()"
+		throw exception;
+		return;
+	}
+	for(var x in obj){
+		getType(x,obj[x]);
+	}
+	
+	if(exception){
+			cb(exception);
+	}else{
+		cb(null,finalised);
+	}
+}
+exports.renderAllSync = function renderAllSync(obj){
+	if(typeof(obj) != "object"){
+		exception  = "Error: first argument must be an object for function : renderAll()"
+		throw exception;
+		return;
+	}
+	for(var x in obj){
+		getType(x,obj[x]);
+	}
+	if(exception){
+		throw exception;
+	}else{
+		return finalised
+	}
+}
+ 
 /**
 **declaring shorthands
 */
-exports.ren = exports.render;
-exports.r = exports.render;
-exports.rn = exports.render;
-exports.delimiter = exports.delim;
-exports.del = exports.delim;
-exports.d = exports.delim;
-exports.setData = exports.set;
-exports.setdata = exports.set;
-exports.sd = exports.set;
-exports.s = exports.set;
+exports.ren = exports.r = exports.rn = exports.render;
+exports.renSync=exports.rSync = exports.rnSync = exports.renderSync;  
+
+exports.setData =exports.setdata = exports.sd = exports.s = exports.set;
+exports.setDataSync =exports.setdataSync = exports.sdSync = exports.sSync = exports.setSync;
+
+exports.renall = exports.renAll = exports.rAll = exports.rall =exports.rnall = exports.rnAll= exports.renderAll;
+exports.renallSync = exports.renAllSync = exports.rAllSync = exports.rallSync =exports.rnallSync = exports.enAllSync= exports.renderAllSync;
 
 
